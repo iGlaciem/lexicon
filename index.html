@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lexicon</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lexicon">
+<meta name="theme-color" content="#181C2A">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:#12151F;font-family:'Karla',system-ui,-apple-system,sans-serif;color:#EDEAE3;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+#app{max-width:430px;margin:0 auto;min-height:100vh;background:#181C2A;
+  padding:calc(26px + env(safe-area-inset-top)) 22px calc(48px + env(safe-area-inset-bottom))}
+.topRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.brand{font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:21px;color:#C8A45C}
+.hero{margin:14px 0 20px}
+.heroWord{font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:46px;line-height:1.05;
+  color:#C8A45C;letter-spacing:-.015em;word-break:break-word}
+.heroPos{color:#8E93A8;font-size:14px;margin-top:8px}
+.quizWord{font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:38px;color:#EDEAE3;margin:16px 0 2px}
+.body{font-size:16px;line-height:1.65;color:#C7C5CE;margin:0 0 18px;max-width:60ch}
+.def{font-family:'Fraunces',Georgia,serif;font-size:21px;line-height:1.5;color:#EDEAE3;margin:8px 0 22px}
+.prompt{font-size:15px;line-height:1.6;color:#C7C5CE;margin:20px 0 14px}
+.mute{color:#8E93A8}.small{font-size:13px}
+.exBlock{border-left:2px solid #C8A45C;padding:2px 0 2px 14px;margin:0 0 20px}
+.exLabel{font-size:12px;color:#8E93A8;margin-bottom:5px}
+.ex{font-family:'Fraunces',Georgia,serif;font-size:16.5px;line-height:1.6;color:#D8D5DE}
+.ex.yours{color:#EDEAE3}
+.btn{width:100%;padding:15px;border:none;border-radius:12px;font-family:inherit;font-size:16px;
+  font-weight:500;background:#252A3D;color:#EDEAE3;cursor:pointer;margin-top:6px}
+.btn.primary{background:#C8A45C;color:#181C2A;font-weight:700}
+.btn.primary:disabled{background:#2C3145;color:#6C7188;cursor:not-allowed}
+.btn.danger{background:transparent;color:#B5654A;border:1px solid #40303099;margin-top:28px}
+.ghost{background:none;border:none;color:#8E93A8;font-family:inherit;font-size:14px;cursor:pointer;padding:4px 0}
+.back{margin-bottom:12px;display:block}
+.progress{height:3px;background:#252A3D;border-radius:2px;overflow:hidden;margin-bottom:14px}
+.progressBar{height:100%;background:#C8A45C;transition:width .3s ease}
+.choices{margin-top:22px;display:flex;flex-direction:column;gap:9px}
+.choice{text-align:left;padding:15px 16px;border-radius:11px;border:1px solid #2C3145;background:#1E2333;
+  color:#DDDAE4;font-family:inherit;font-size:15px;line-height:1.45;cursor:pointer}
+.choice:active{background:#252A3D}
+.choice.unsure{color:#8E93A8;background:transparent;border-style:dashed}
+.cardStack{display:flex;flex-direction:column;gap:13px}
+.bigCard{text-align:left;width:100%;padding:22px;border-radius:16px;border:1px solid #2C3145;
+  background:#1E2333;cursor:pointer;font-family:inherit}
+.bigCard.spent{opacity:.5;cursor:default}
+.bigCardLabel{font-size:13px;color:#8E93A8}
+.bigCardValue{font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:38px;color:#C8A45C;margin:6px 0 4px}
+.bigCardSub{font-size:13.5px;color:#9A9EB0;line-height:1.5}
+.statRow{display:flex;gap:26px;margin:32px 0 4px}
+.statNum{font-family:'Fraunces',Georgia,serif;font-weight:300;font-size:26px;color:#EDEAE3}
+.grades{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:8px}
+.grade{padding:14px 10px;border-radius:12px;border:1px solid #2C3145;background:#1E2333;cursor:pointer;
+  display:flex;flex-direction:column;gap:3px;font-family:inherit}
+.gradeLabel{font-size:15px;font-weight:700;color:#EDEAE3}
+.gradeSub{font-size:12px;color:#8E93A8}
+.g0{border-color:#5A3227}.g0 .gradeLabel{color:#B5654A}
+.g3{border-color:#3B5240}.g3 .gradeLabel{color:#6E9B72}
+.input{width:100%;padding:14px;border-radius:12px;border:1px solid #2C3145;background:#1E2333;
+  color:#EDEAE3;font-family:'Fraunces',Georgia,serif;font-size:16.5px;line-height:1.55;
+  resize:vertical;margin-bottom:10px}
+.input:focus{outline:2px solid #C8A45C;outline-offset:1px}
+.list{margin:22px 0 0;border-top:1px solid #252A3D}
+.listRow{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid #252A3D}
+.listWord{font-family:'Fraunces',Georgia,serif;font-size:17px;color:#EDEAE3}
+.alert{background:#2A2029;border:1px solid #5A3227;color:#D8A08C;padding:12px 14px;border-radius:11px;
+  font-size:14px;margin-bottom:18px;line-height:1.5}
+button:focus-visible{outline:2px solid #C8A45C;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ============ WORD LIST — 8 bands x 12. [word, pos, definition, example] ============ */
+const BANDS=[
+[["brisk","adj","quick and energetic","She set off at a brisk walk to make the train."],
+["vivid","adj","producing strong, clear images in the mind","He still has a vivid memory of the storm."],
+["cease","v","to stop or bring to an end","The rain finally ceased around midnight."],
+["weary","adj","very tired, especially from effort","The weary hikers dropped their packs at camp."],
+["blunt","adj","direct and honest, sometimes rudely so","Her blunt review stung, but it was fair."],
+["grim","adj","forbidding, harsh, or depressing","The doctor's face wore a grim expression."],
+["swift","adj","moving or happening very fast","The company made a swift decision to pull the product."],
+["frail","adj","weak and easily damaged","My grandmother has grown frail this winter."],
+["vast","adj","extremely large in size or extent","A vast desert stretched beyond the road."],
+["keen","adj","sharp, or intensely eager","He has a keen eye for detail."],
+["harsh","adj","unpleasantly rough or severe","The harsh light made everyone squint."],
+["eager","adj","keenly wanting to do something","The kids were eager to open the box."]],
+[["candid","adj","honest and straightforward, even when awkward","I'll be candid: the first draft isn't working."],
+["adamant","adj","refusing to be persuaded to change","He was adamant that he had locked the door."],
+["novice","n","a person new to a skill or activity","As a novice, she stayed on the gentle slopes."],
+["lure","v","to tempt someone toward something","Cheap rent lured them to the far side of town."],
+["mundane","adj","dull and ordinary; lacking interest","Most of the job is mundane paperwork."],
+["brittle","adj","hard but liable to break easily","Old rubber bands go brittle and snap."],
+["coax","v","to persuade gently and patiently","He coaxed the cat out from under the porch."],
+["drab","adj","dull, colorless, and cheerless","The office walls were a drab beige."],
+["feign","v","to pretend to feel or have something","She feigned surprise at the news."],
+["haphazard","adj","done without plan or order","The files were stacked in haphazard piles."],
+["scarce","adj","in short supply; hard to find","Fresh water became scarce by the third day."],
+["vex","v","to annoy or frustrate","The missing receipt vexed him all afternoon."]],
+[["aloof","adj","distant and uninvolved with others","He stayed aloof at the party, watching from a corner."],
+["prudent","adj","showing care and thought for the future","It's prudent to keep three months of savings."],
+["tangible","adj","able to be touched, or clearly real","We need tangible results, not promises."],
+["lucid","adj","clear and easy to understand","She gave a lucid summary of the whole dispute."],
+["meticulous","adj","extremely careful about small details","His meticulous notes saved the project."],
+["placate","v","to calm someone's anger","They offered a refund to placate the customer."],
+["resilient","adj","able to recover quickly from difficulty","Kids are more resilient than we expect."],
+["sporadic","adj","happening at irregular intervals","There was sporadic applause between songs."],
+["tenacious","adj","holding firmly; persistent and determined","A tenacious reporter finally got the story."],
+["ambiguous","adj","open to more than one interpretation","His answer was deliberately ambiguous."],
+["concise","adj","expressing much in few words","Keep the summary concise \u2014 one page."],
+["volatile","adj","liable to change rapidly and unpredictably","The market has been volatile all quarter."]],
+[["austere","adj","severely plain; strict and unadorned","The monastery was austere: stone walls, no decoration."],
+["cogent","adj","clear, logical, and convincing","She made a cogent case for delaying the launch."],
+["innate","adj","present from birth; inborn","He has an innate sense of rhythm."],
+["banal","adj","so unoriginal as to be boring","The speech was full of banal advice."],
+["candor","n","open and unreserved honesty","I appreciated the candor of his feedback."],
+["disparate","adj","essentially different in kind; not comparable","The report pulls together disparate sources."],
+["eloquent","adj","fluent and persuasive in expression","Her eloquent closing won the room."],
+["frugal","adj","sparing with money or resources","They lived frugally to pay off the loan."],
+["impetuous","adj","acting suddenly without thought","One impetuous email cost him the client."],
+["tacit","adj","understood or implied without being stated","There was a tacit agreement not to mention it."],
+["zealous","adj","showing intense energy for a cause","He was a zealous defender of the old rules."],
+["pragmatic","adj","dealing with things practically rather than ideally","Let's be pragmatic and ship what we have."]],
+[["laconic","adj","using very few words","His laconic reply was simply: \u201cNo.\u201d"],
+["obdurate","adj","stubbornly refusing to change one's mind","The landlord remained obdurate about the rent."],
+["ephemeral","adj","lasting a very short time","Fame online is ephemeral."],
+["fastidious","adj","very attentive to detail; hard to please","He is fastidious about how the code is formatted."],
+["garrulous","adj","excessively talkative about trivial things","Our garrulous neighbor caught me at the mailbox."],
+["intrepid","adj","fearless in the face of danger","An intrepid crew sailed into the storm."],
+["opaque","adj","not transparent, or impossible to understand","The contract's terms were deliberately opaque."],
+["reticent","adj","reluctant to speak or reveal thoughts","She was reticent about her plans."],
+["salient","adj","most noticeable or important","Let me pull out the salient points."],
+["ubiquitous","adj","present or found everywhere","Screens are now ubiquitous in restaurants."],
+["assiduous","adj","showing great care and persistence","Assiduous practice turned him into a strong player."],
+["nuance","n","a subtle difference in meaning or tone","The translation loses a lot of nuance."]],
+[["abstruse","adj","difficult to understand; obscure","The paper's abstruse notation lost most readers."],
+["alacrity","n","brisk and cheerful readiness","He accepted the invitation with alacrity."],
+["diffident","adj","modest or shy from lack of self-confidence","A diffident student rarely raises a hand."],
+["ebullient","adj","cheerful and full of energy","She was ebullient after the interview."],
+["inexorable","adj","impossible to stop or prevent","The inexorable rise of costs closed the shop."],
+["insidious","adj","spreading harmfully in a gradual, subtle way","Small compromises had an insidious effect on quality."],
+["munificent","adj","extremely generous","A munificent donor funded the whole wing."],
+["obsequious","adj","excessively eager to please or obey","The obsequious clerk agreed with everything."],
+["perfunctory","adj","done routinely, without care or interest","He gave the room a perfunctory glance."],
+["recalcitrant","adj","stubbornly resistant to authority","A recalcitrant engine refused to start."],
+["sanguine","adj","optimistic, especially in a hard situation","She stayed sanguine about the odds."],
+["peripatetic","adj","traveling constantly from place to place","A peripatetic childhood left him with no hometown."]],
+[["anodyne","adj","bland and unlikely to cause offense","The statement was anodyne and said nothing."],
+["apocryphal","adj","widely circulated but probably untrue","That quote is almost certainly apocryphal."],
+["cupidity","n","excessive greed for wealth","The scandal was a plain case of cupidity."],
+["inchoate","adj","just begun and not fully formed","He had an inchoate idea for a novel."],
+["lachrymose","adj","tearful, or inducing tears","The film's lachrymose ending felt manipulative."],
+["minatory","adj","threatening or menacing in tone","The letter had a minatory closing line."],
+["palliate","v","to lessen severity without curing","The measures palliate the symptoms of the crisis."],
+["pellucid","adj","transparently clear, in substance or style","Her pellucid prose makes hard ideas easy."],
+["propinquity","n","nearness in place, time, or relationship","Friendships often start from mere propinquity."],
+["refractory","adj","stubbornly unmanageable or resistant","A refractory infection resisted every drug."],
+["truculent","adj","eager to argue or fight; aggressively defiant","He turned truculent after the second round."],
+["supervene","v","to occur later as an additional development","Complications supervened after the surgery."]],
+[["adumbrate","v","to outline faintly or foreshadow","The opening chapter adumbrates the later betrayal."],
+["crepuscular","adj","relating to or active at twilight","Deer are crepuscular, grazing at dusk."],
+["eleemosynary","adj","relating to or dependent on charity","The hospital began as an eleemosynary institution."],
+["hebetude","n","dullness of mind; mental lethargy","A long afternoon of meetings induced pure hebetude."],
+["limerence","n","an involuntary, obsessive romantic infatuation","What he called love was closer to limerence."],
+["maunder","v","to talk or wander in a rambling way","He maundered on about the old days."],
+["objurgate","v","to rebuke harshly","The editor objurgated the whole newsroom."],
+["pleonasm","n","the use of more words than needed","\u201cFree gift\u201d is a common pleonasm."],
+["susurrus","n","a whispering or rustling sound","A susurrus of leaves filled the orchard."],
+["velleity","n","a wish too slight to lead to action","His plan to learn Greek was pure velleity."],
+["xenial","adj","relating to hospitality toward guests","They kept a xenial house, always a spare bed ready."],
+["apodictic","adj","clearly established beyond dispute","He spoke in apodictic tones that invited no reply."]]
+];
+
+const ALL=[];
+BANDS.forEach((b,bi)=>b.forEach((w,wi)=>ALL.push({id:bi+"-"+wi,word:w[0],pos:w[1],def:w[2],ex:w[3],band:bi+1})));
+const BAND_NAMES=["Everyday","Common","Confident","Well-read","Advanced","Literary","Rare","Obscure"];
+
+/* ============================ helpers ============================ */
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad2=n=>String(n).padStart(2,"0");
+const fmt=d=>d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+const today=()=>fmt(new Date());
+const addDays=(s,n)=>{const[y,m,d]=s.split("-").map(Number);return fmt(new Date(y,m-1,d+n));};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* SM-2. grade 0 Again, 1 Hard, 2 Good, 3 Easy */
+function schedule(card,grade){
+  const q=[2,3,4,5][grade];
+  let ef=card&&card.ef!=null?card.ef:2.5, reps=card?card.reps||0:0, interval=card?card.interval||0:0;
+  if(q<3){reps=0;interval=1;}
+  else{reps+=1;interval=reps===1?1:reps===2?6:Math.round(interval*ef);}
+  ef=Math.max(1.3,ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));
+  return{ef:ef,reps:reps,interval:interval,due:addDays(today(),interval)};
+}
+
+/* ============================ state ============================ */
+const KEY="lexicon:v1";
+const FRESH={calibrated:false,band:3,known:[],cards:{},lastNew:null,recent:[],learned:0};
+let S=JSON.parse(JSON.stringify(FRESH));
+let screen="welcome", err=null, tmp={};
+
+function load(){
+  try{const raw=localStorage.getItem(KEY);
+    if(raw){S=Object.assign(JSON.parse(JSON.stringify(FRESH)),JSON.parse(raw));}
+  }catch(e){err="Couldn't read saved progress. Starting fresh.";}
+  screen=S.calibrated?"home":"welcome";
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S));err=null;}
+  catch(e){err="Couldn't save. If you're in Private Browsing, progress won't persist.";}
+}
+
+/* ============================ screens ============================ */
+const app=document.getElementById("app");
+function render(){app.innerHTML=VIEWS[screen]();window.scrollTo(0,0);}
+function go(s){screen=s;tmp={};render();}
+
+const alertHTML=()=>err?`<div class="alert">${esc(err)}</div>`:"";
+const gradesHTML=()=>`<div class="grades">
+  <button class="grade g0" data-grade="0"><span class="gradeLabel">Again</span><span class="gradeSub">Missed it</span></button>
+  <button class="grade g1" data-grade="1"><span class="gradeLabel">Hard</span><span class="gradeSub">Slow, shaky</span></button>
+  <button class="grade g2" data-grade="2"><span class="gradeLabel">Good</span><span class="gradeSub">Got it</span></button>
+  <button class="grade g3" data-grade="3"><span class="gradeLabel">Easy</span><span class="gradeSub">Instant</span></button></div>`;
+
+const VIEWS={
+welcome:()=>`
+  <div class="hero"><div class="heroWord">lexicon</div>
+  <div class="heroPos">noun \u00b7 the words you actually own</div></div>
+  <p class="body">One new word a day, chosen just above where your vocabulary currently sits.
+  Older words come back on a schedule so they stick.</p>
+  <p class="body">First, a short quiz to find your level. 24 words, about five minutes.
+  Guessing skews the result, so pick <em>Not sure</em> when you're not sure.</p>
+  ${alertHTML()}
+  <button class="btn primary" data-act="startQuiz">Start the quiz</button>`,
+
+calibrate:()=>{
+  const it=tmp.items[tmp.i];
+  return `<div class="progress"><div class="progressBar" style="width:${(tmp.i/tmp.items.length)*100}%"></div></div>
+  <div class="mute small">${tmp.i+1} of ${tmp.items.length}</div>
+  <div class="quizWord">${esc(it.target.word)}</div>
+  <div class="heroPos">${esc(it.target.pos)}</div>
+  <div class="choices">
+    ${it.choices.map((c,n)=>`<button class="choice" data-choice="${n}">${esc(c)}</button>`).join("")}
+    <button class="choice unsure" data-choice="-1">Not sure</button>
+  </div>`;
+},
+
+home:()=>{
+  const t=today();
+  const due=Object.keys(S.cards).filter(k=>S.cards[k].due<=t).length;
+  const newDone=S.lastNew===t;
+  return `<div class="topRow"><div class="brand">lexicon</div>
+    <button class="ghost" data-act="progress">Progress</button></div>
+  ${alertHTML()}
+  <div class="cardStack">
+    <button class="bigCard${newDone?" spent":""}" data-act="learn"${newDone?" disabled":""}>
+      <div class="bigCardLabel">Today's word</div>
+      <div class="bigCardValue">${newDone?"Learned":"Ready"}</div>
+      <div class="bigCardSub">${newDone?"Come back tomorrow for the next one."
+        :"Drawn from the "+BAND_NAMES[S.band-1].toLowerCase()+" range"}</div>
+    </button>
+    <button class="bigCard${due===0?" spent":""}" data-act="review"${due===0?" disabled":""}>
+      <div class="bigCardLabel">Reviews due</div>
+      <div class="bigCardValue">${due}</div>
+      <div class="bigCardSub">${due===0?"Nothing due. Words return when they're close to fading."
+        :"Words scheduled to come back today."}</div>
+    </button>
+  </div>
+  <div class="statRow">
+    <div><div class="statNum">${S.learned}</div><div class="mute small">words learned</div></div>
+    <div><div class="statNum">${BAND_NAMES[S.band-1]}</div><div class="mute small">current level</div></div>
+  </div>`;
+},
+
+learn:()=>{
+  const w=tmp.word;
+  if(!w) return `<div class="quizWord">Done</div>
+    <p class="body">You've been through every word in the list. Adding more words to the
+    list in <code>index.html</code> is the next real piece of work here.</p>
+    <button class="btn" data-act="home">Back</button>`;
+  let h=`<button class="ghost back" data-act="home">Back</button>
+  <div class="hero"><div class="heroWord">${esc(w.word)}</div>
+  <div class="heroPos">${esc(w.pos)} \u00b7 ${BAND_NAMES[w.band-1].toLowerCase()}</div></div>
+  <div class="def">${esc(w.def)}</div>`;
+  if(tmp.step===0){
+    h+=`<div class="exBlock"><div class="exLabel">In use</div><div class="ex">${esc(w.ex)}</div></div>
+    <button class="btn primary" data-act="toWrite">Try using it</button>`;
+  }else if(tmp.step===1){
+    h+=`<p class="prompt">Write your own sentence using <strong>${esc(w.word)}</strong>.
+    Don't look back at the example.</p>
+    <textarea class="input" id="sent" rows="4" placeholder="A sentence with &quot;${esc(w.word)}&quot; in it\u2026">${esc(tmp.sentence||"")}</textarea>
+    <button class="btn primary" data-act="checkSent">Check my sentence</button>`;
+  }else{
+    h+=`<div class="exBlock"><div class="exLabel">You wrote</div>
+      <div class="ex yours">${esc(tmp.sentence)}</div></div>
+    <div class="exBlock"><div class="exLabel">A natural use</div><div class="ex">${esc(w.ex)}</div></div>
+    <p class="prompt">Compare them. Did you use it the way a fluent speaker would \u2014 right sense,
+    right grammar, right register? Be honest; the schedule is only as good as your answer.</p>
+    ${gradesHTML()}`;
+  }
+  return h;
+},
+
+review:()=>{
+  if(tmp.i>=tmp.queue.length)
+    return `<div class="quizWord">All clear</div>
+    <p class="body">Reviews finished. Each word you graded is scheduled to return
+    just before you'd likely forget it.</p>
+    <button class="btn primary" data-act="home">Back</button>`;
+  const w=ALL.find(x=>x.id===tmp.queue[tmp.i]);
+  let h=`<button class="ghost back" data-act="home">Back</button>
+  <div class="mute small">${tmp.i+1} of ${tmp.queue.length}</div>
+  <div class="hero"><div class="heroWord">${esc(w.word)}</div>
+  <div class="heroPos">${esc(w.pos)}</div></div>`;
+  if(!tmp.revealed){
+    h+=`<p class="prompt">Say the meaning out loud before you look.
+    Recalling it is what strengthens it.</p>
+    <button class="btn primary" data-act="reveal">Show meaning</button>`;
+  }else{
+    h+=`<div class="def">${esc(w.def)}</div>
+    <div class="exBlock"><div class="exLabel">In use</div><div class="ex">${esc(w.ex)}</div></div>
+    ${gradesHTML()}`;
+  }
+  return h;
+},
+
+progress:()=>{
+  const t=today();
+  const rows=Object.keys(S.cards).map(id=>({w:ALL.find(x=>x.id===id),c:S.cards[id]}))
+    .filter(r=>r.w).sort((a,b)=>a.c.due<b.c.due?-1:1);
+  return `<button class="ghost back" data-act="home">Back</button>
+  <div class="quizWord">Progress</div>
+  <div class="statRow">
+    <div><div class="statNum">${S.learned}</div><div class="mute small">learned</div></div>
+    <div><div class="statNum">${S.known.length}</div><div class="mute small">already knew</div></div>
+    <div><div class="statNum">${BAND_NAMES[S.band-1]}</div><div class="mute small">level</div></div>
+  </div>
+  ${rows.length===0?'<p class="body mute">No words in rotation yet. Learn today\u2019s word to start the schedule.</p>'
+    :'<div class="list">'+rows.map(r=>`<div class="listRow"><span class="listWord">${esc(r.w.word)}</span>
+      <span class="mute small">${r.c.due<=t?"due now":"in "+r.c.interval+"d"}</span></div>`).join("")+'</div>'}
+  <button class="btn danger" data-act="reset">Erase everything and retake the quiz</button>`
+}
+};
+
+/* ============================ actions ============================ */
+function buildQuiz(){
+  const items=[];
+  BANDS.forEach((_,bi)=>{
+    shuffle(ALL.filter(w=>w.band===bi+1)).slice(0,3).forEach(target=>{
+      const pool=ALL.filter(w=>w.id!==target.id&&Math.abs(w.band-target.band)<=2);
+      items.push({target:target,choices:shuffle([target.def].concat(shuffle(pool).slice(0,3).map(w=>w.def)))});
+    });
+  });
+  return items;
+}
+function pickWord(){
+  const taken={};S.known.forEach(id=>taken[id]=1);Object.keys(S.cards).forEach(id=>taken[id]=1);
+  const order=[S.band,S.band+1,S.band-1,S.band+2,S.band-2];
+  for(const b of order){
+    const pool=ALL.filter(w=>w.band===b&&!taken[w.id]);
+    if(pool.length)return shuffle(pool)[0];
+  }
+  const any=ALL.filter(w=>!taken[w.id]);
+  return any.length?shuffle(any)[0]:null;
+}
+
+app.addEventListener("click",e=>{
+  const btn=e.target.closest("button");if(!btn)return;
+  const act=btn.dataset.act;
+
+  if(act==="startQuiz"){tmp={items:buildQuiz(),i:0,results:[]};screen="calibrate";return render();}
+  if(act==="home")return go("home");
+  if(act==="progress")return go("progress");
+  if(act==="reset"){if(!confirm("Erase all progress and retake the quiz?"))return;
+    S=JSON.parse(JSON.stringify(FRESH));save();return go("welcome");}
+  if(act==="learn"){const w=pickWord();tmp={word:w,step:0,sentence:""};screen="learn";return render();}
+  if(act==="review"){const t=today();
+    tmp={queue:shuffle(Object.keys(S.cards).filter(k=>S.cards[k].due<=t)),i:0,revealed:false};
+    screen="review";return render();}
+  if(act==="toWrite"){tmp.step=1;return render();}
+  if(act==="reveal"){tmp.revealed=true;return render();}
+  if(act==="checkSent"){
+    const v=document.getElementById("sent").value.trim();
+    if(v.length<8){alert("Write a full sentence first.");return;}
+    tmp.sentence=v;tmp.step=2;return render();}
+
+  if(btn.dataset.choice!==undefined){
+    const it=tmp.items[tmp.i],n=+btn.dataset.choice;
+    const correct=n>=0&&it.choices[n]===it.target.def;
+    tmp.results.push({band:it.target.band,correct:correct,id:it.target.id});
+    if(tmp.i+1>=tmp.items.length){
+      const byBand={};
+      tmp.results.forEach(r=>{(byBand[r.band]=byBand[r.band]||[]).push(r.correct);});
+      let ceiling=1;
+      for(let b=1;b<=8;b++){
+        const rs=byBand[b]||[];
+        if(rs.filter(Boolean).length/(rs.length||1)>=0.6)ceiling=b;
+      }
+      S.calibrated=true;S.band=Math.min(8,ceiling+1);
+      S.known=tmp.results.filter(r=>r.correct).map(r=>r.id);
+      save();return go("home");
+    }
+    tmp.i++;return render();
+  }
+
+  if(btn.dataset.grade!==undefined){
+    const g=+btn.dataset.grade;
+    if(screen==="learn"){
+      const w=tmp.word;
+      S.cards[w.id]=schedule(null,g);
+      let recent=S.recent.concat(g>=2?1:0).slice(-15);
+      if(recent.length>=10){
+        const acc=recent.reduce((a,b)=>a+b,0)/recent.length;
+        if(acc>0.9&&S.band<8){S.band++;recent=[];}
+        else if(acc<0.5&&S.band>1){S.band--;recent=[];}
+      }
+      S.recent=recent;S.lastNew=today();S.learned++;
+      save();return go("home");
+    }else{
+      const w=ALL.find(x=>x.id===tmp.queue[tmp.i]);
+      S.cards[w.id]=schedule(S.cards[w.id],g);
+      save();tmp.revealed=false;tmp.i++;return render();
+    }
+  }
+});
+
+load();render();
+</script>
+</body>
+</html>
